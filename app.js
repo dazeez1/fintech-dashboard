@@ -31,3 +31,5 @@ app.use('/api', limiter);
 app.use(xss());
 
 app.use(cors());
+
+module.exports = app;
