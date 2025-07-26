@@ -9,6 +9,14 @@ uploads/*
 uploads/images/
 uploads/videos/
 
+# MongoDB binaries and large files
+mongodb-bin/
+mongodb-binaries/
+*.exe
+*.pdb
+*.zip
+*.zip.zip
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
