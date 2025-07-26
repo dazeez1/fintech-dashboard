@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Override Transaction</title>
+</head>
+<body>
+
+  <h2>Admin - Override Transaction</h2> 
+  <form id="overrideForm"> 
+    <input type="text" id="txnId" placeholder="Transaction ID" required /> 
+
+    <select id="newType"> 
+      <option value="">--Leave unchanged--</option> 
+      <option value="credit">Credit</option> 
+      <option value="debit">Debit</option> 
+    </select> 
+
+    <input type="number" id="newAmount" placeholder="New Amount" /> 
+    <button type="submit">Override</button> 
+  </form>
+
+  <!-- Link to the JavaScript file -->
+  <script src="JS/admin.js"></script>
+
+</body>
+</html>

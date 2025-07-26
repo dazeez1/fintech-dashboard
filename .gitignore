@@ -1,3 +1,20 @@
+node_modules
+*.local
+
+.env
+
+# User uploaded files
+uploads/
+uploads/*
+uploads/images/
+uploads/videos/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+
 # logs
 logs
 *.log
@@ -7,25 +24,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sin
-*.sw?
-
-
-#ENV
-.env
+# Prevent accidental commits of user content
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.mp4
+*.mov
+*.avi
+*.mkv
 
 
 

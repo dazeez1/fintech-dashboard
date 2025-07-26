@@ -4,19 +4,32 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --runInBand"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
-    "dotenv": "^16.6.0",
+    "dotenv": "^16.6.1",
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.1",
     "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.1",
+    "multer": "^2.0.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "xss": "^1.0.15",
     "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^8.0.0",
+    "jest": "^30.0.4",
+    "mongodb-memory-server": "^10.1.4",
+    "supertest": "^7.1.3"
   }
 }
