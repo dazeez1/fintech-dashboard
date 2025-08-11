@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Test</title>
+</head>
+<body>
+    <h1>Backend Connection Test</h1>
+    
+    <div>
+        <h2>Test Current Backend:</h2>
+        <button onclick="testCurrentBackend()">Test https://fintech-dashboard-t3e1.onrender.com</button>
+        <p id="currentResult"></p>
+    </div>
+    
+    <div>
+        <h2>Test Custom Backend:</h2>
+        <input type="url" id="customUrl" placeholder="https://your-backend.onrender.com/api" style="width: 300px;">
+        <button onclick="testCustomBackend()">Test Custom URL</button>
+        <p id="customResult"></p>
+    </div>
+    
+    <div>
+        <h2>Test Endpoints:</h2>
+        <button onclick="testAuth()">Test /auth/login</button>
+        <button onclick="testDashboard()">Test /dashboard/dashboard</button>
+        <p id="endpointResult"></p>
+    </div>
+    
+    <script>
+        async function testCurrentBackend() {
+            const url = 'https://fintech-dashboard-t3e1.onrender.com/api/test';
+            document.getElementById('currentResult').textContent = 'Testing...';
+            
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    document.getElementById('currentResult').textContent = '✅ Current backend is working!';
+                } else {
+                    document.getElementById('currentResult').textContent = '❌ Current backend failed: ' + response.status;
+                }
+            } catch (error) {
+                document.getElementById('currentResult').textContent = '❌ Current backend error: ' + error.message;
+            }
+        }
+        
+        async function testCustomBackend() {
+            const url = document.getElementById('customUrl').value;
+            if (!url) {
+                document.getElementById('customResult').textContent = 'Please enter a URL';
+                return;
+            }
+            
+            document.getElementById('customResult').textContent = 'Testing...';
+            
+            try {
+                const response = await fetch(url + '/test');
+                if (response.ok) {
+                    document.getElementById('customResult').textContent = '✅ Custom backend is working!';
+                } else {
+                    document.getElementById('customResult').textContent = '❌ Custom backend failed: ' + response.status;
+                }
+            } catch (error) {
+                document.getElementById('customResult').textContent = '❌ Custom backend error: ' + error.message;
+            }
+        }
+        
+        async function testAuth() {
+            const url = 'https://fintech-dashboard-t3e1.onrender.com/api/auth/login';
+            document.getElementById('endpointResult').textContent = 'Testing auth...';
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'test', password: 'test' })
+                });
+                
+                if (response.status === 401) {
+                    document.getElementById('endpointResult').textContent = '✅ Auth endpoint working (401 expected for invalid credentials)';
+                } else {
+                    document.getElementById('endpointResult').textContent = '⚠️ Auth endpoint: ' + response.status;
+                }
+            } catch (error) {
+                document.getElementById('endpointResult').textContent = '❌ Auth endpoint error: ' + error.message;
+            }
+        }
+        
+        async function testDashboard() {
+            const url = 'https://fintech-dashboard-t3e1.onrender.com/api/dashboard/dashboard';
+            document.getElementById('endpointResult').textContent = 'Testing dashboard...';
+            
+            try {
+                const response = await fetch(url);
+                
+                if (response.status === 401) {
+                    document.getElementById('endpointResult').textContent = '✅ Dashboard endpoint working (401 expected without token)';
+                } else {
+                    document.getElementById('endpointResult').textContent = '⚠️ Dashboard endpoint: ' + response.status;
+                }
+            } catch (error) {
+                document.getElementById('endpointResult').textContent = '❌ Dashboard endpoint error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html> 
