@@ -2,33 +2,21 @@
 
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const path = require('path');
 
 let mongo;
 
 beforeAll(async () => {
   mongo = await MongoMemoryServer.create({
-     binary: {
-
-        systemBinary: path.resolve(__dirname, '../mongodb-bin/bin/mongod.exe'), // adjust path as needed
-    
-     /*
-      version: '7.0.14',
-      downloadDir: './mongodb-binaries',
-      systemBinary: undefined, // do not use a globally installed one
-      skipMD5: true, // skip checksum to avoid errors
-
-     
-      version: process.env.MONGOMS_VERSION || '7.0.14',
-      downloadDir: process.env.MONGOMS_DOWNLOAD_DIR || './mongodb-binaries',
-      */
-    },    
+    version: '7.0.14',
+    downloadDir: './mongodb-binaries',
+    skipMD5: true, // skip checksum to avoid errors
   });
 
   const uri = mongo.getUri();
+  console.log('Test MongoDB URI:', uri);
 
   await mongoose.connect(uri);
-},  300000);  //5 minutes
+}, 60000); // 1 minute timeout
 
 
 afterAll(async () => {

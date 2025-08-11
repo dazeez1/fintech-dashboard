@@ -20,8 +20,10 @@ const profileRoutes = require("./routes/profileRoutes");
 dotenv.config();
 console.log("Mongo URI:", process.env.MONGO_URI);
 
-// Connect DB first
-connectDB();
+// Connect DB first (skip during testing)
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+}
 
 // Middleware to parse JSON
 app.use(express.json());

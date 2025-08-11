@@ -16,7 +16,7 @@ describe('Dashboard Routes', () => {
 
   it('should return dashboard summary', async () => {
     const res = await request(app)
-      .get('/api/dashboard')
+      .get('/api/dashboard/dashboard')
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.statusCode).toBe(201);
@@ -25,7 +25,7 @@ describe('Dashboard Routes', () => {
   });
 
    it('should block dashboard without token', async () => {
-    const res = await request(app).get('/api/dashboard');
+    const res = await request(app).get('/api/dashboard/dashboard');
     expect(res.statusCode).toBe(401);
   });
    
