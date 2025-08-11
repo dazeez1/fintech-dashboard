@@ -60,5 +60,6 @@ const { register, login } = require('../controllers/authController');
 
 router.post('/login', login);
 router.post('/register', register); 
+router.post('/signup', register); // alias for clients using /signup
 
 module.exports = router;
