@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration - Fintech Dashboard</title>
+</head>
+<body>
+    <h1>Backend Configuration</h1>
+    
+    <div>
+        <h2>Current Backend URL:</h2>
+        <p id="currentUrl">Loading...</p>
+    </div>
+    
+    <div>
+        <h2>Set Backend URL:</h2>
+        <form id="configForm">
+            <label for="backendUrl">Backend API URL:</label>
+            <input type="url" id="backendUrl" name="backendUrl" 
+                   placeholder="https://your-backend-url.vercel.app/api" required>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    
+    <div>
+        <h2>Test Connection:</h2>
+        <button onclick="testConnection()">Test Backend Connection</button>
+        <p id="testResult"></p>
+    </div>
+    
+    <div>
+        <h2>Quick Links:</h2>
+        <p><a href="login.html">Go to Login</a></p>
+        <p><a href="index.html">Go to Home</a></p>
+    </div>
+    
+    <script>
+        // Show current backend URL
+        const currentUrl = localStorage.getItem('BACKEND_API_URL') || 'Not set';
+        document.getElementById('currentUrl').textContent = currentUrl;
+        
+        // Handle form submission
+        document.getElementById('configForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const url = document.getElementById('backendUrl').value;
+            localStorage.setItem('BACKEND_API_URL', url);
+            document.getElementById('currentUrl').textContent = url;
+            alert('Backend URL saved!');
+        });
+        
+        // Test connection
+        async function testConnection() {
+            const url = localStorage.getItem('BACKEND_API_URL');
+            if (!url) {
+                document.getElementById('testResult').textContent = 'No backend URL set';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${url}/test`);
+                if (response.ok) {
+                    document.getElementById('testResult').textContent = '✅ Connection successful!';
+                } else {
+                    document.getElementById('testResult').textContent = '❌ Connection failed: ' + response.status;
+                }
+            } catch (error) {
+                document.getElementById('testResult').textContent = '❌ Connection failed: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html> 

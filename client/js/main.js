@@ -1,9 +1,46 @@
 // Main JavaScript file for Fintech Dashboard Frontend
 // Handles authentication, API calls, and UI interactions
 
-// Get backend API URL from environment variable or use default
-// For Vercel deployment, this will be set as an environment variable
-const BACKEND_API_URL = window.BACKEND_API_URL || 'https://fintech-dashboard-backend.vercel.app/api';
+// Get backend API URL - try multiple sources
+let BACKEND_API_URL;
+
+// Method 1: Try environment variable (for Vercel/Netlify)
+if (typeof window !== 'undefined' && window.BACKEND_API_URL) {
+    BACKEND_API_URL = window.BACKEND_API_URL;
+}
+// Method 2: Try meta tag (for static hosting)
+else if (document.querySelector('meta[name="backend-url"]')) {
+    BACKEND_API_URL = document.querySelector('meta[name="backend-url"]').getAttribute('content');
+}
+// Method 3: Try localStorage (for manual configuration)
+else if (localStorage.getItem('BACKEND_API_URL')) {
+    BACKEND_API_URL = localStorage.getItem('BACKEND_API_URL');
+}
+// Method 4: Fallback to common patterns
+else {
+    // Try to detect if we're on Vercel/Netlify and construct the URL
+    const hostname = window.location.hostname;
+    if (hostname.includes('vercel.app')) {
+        // If frontend is on Vercel, backend might be on same domain with different subdomain
+        BACKEND_API_URL = `https://fintech-dashboard-backend.vercel.app/api`;
+    } else if (hostname.includes('netlify.app')) {
+        // If frontend is on Netlify, backend might be on Vercel
+        BACKEND_API_URL = `https://fintech-dashboard-backend.vercel.app/api`;
+    } else {
+        // Local development or other hosting
+        BACKEND_API_URL = `http://localhost:5001/api`;
+    }
+}
+
+// Log the backend URL for debugging
+console.log('Backend API URL:', BACKEND_API_URL);
+
+// Function to update backend URL (for manual configuration)
+window.setBackendURL = (url) => {
+    BACKEND_API_URL = url;
+    localStorage.setItem('BACKEND_API_URL', url);
+    console.log('Backend URL updated to:', url);
+};
 
 // Utility functions
 const showError = (message) => {
@@ -55,8 +92,12 @@ const apiCall = async (endpoint, options = {}) => {
         }
     };
 
+    // Log the full URL being called for debugging
+    const fullUrl = `${BACKEND_API_URL}${endpoint}`;
+    console.log('Making API call to:', fullUrl);
+
     try {
-        const response = await fetch(`${BACKEND_API_URL}${endpoint}`, {
+        const response = await fetch(fullUrl, {
             ...defaultOptions,
             ...options,
             headers: {
@@ -65,7 +106,11 @@ const apiCall = async (endpoint, options = {}) => {
             }
         });
 
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+
         const data = await response.json();
+        console.log('Response data:', data);
 
         if (!response.ok) {
             throw new Error(data.message || `HTTP error! status: ${response.status}`);
@@ -74,6 +119,8 @@ const apiCall = async (endpoint, options = {}) => {
         return data;
     } catch (error) {
         console.error('API call failed:', error);
+        console.error('Full URL was:', fullUrl);
+        console.error('Backend URL is:', BACKEND_API_URL);
         throw error;
     }
 };
