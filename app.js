@@ -66,6 +66,7 @@ const allowedOrigins = [
   "http://localhost:5001", 
   "http://127.0.0.1:5500",
   "http://localhost:3000",
+  "https://fintech-dashboard-tau.vercel.app",
   "https://*.vercel.app",
   "https://*.netlify.app",
   "https://*.github.io"
@@ -74,12 +75,26 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.some(allowed => {
+      console.log('CORS request from origin:', origin);
+      
+      if (!origin) {
+        // Allow requests with no origin (like mobile apps or Postman)
+        callback(null, true);
+        return;
+      }
+      
+      // Check if origin is in allowed list
+      const isAllowed = allowedOrigins.some(allowed => {
         if (allowed.includes('*')) {
-          return origin.includes(allowed.replace('*.', ''));
+          // Handle wildcard domains
+          const domain = allowed.replace('*.', '');
+          return origin.includes(domain);
         }
-        return allowedOrigins.includes(origin);
-      })) {
+        return origin === allowed;
+      });
+      
+      if (isAllowed) {
+        console.log('CORS allowed for origin:', origin);
         callback(null, true);
       } else {
         console.log('CORS blocked origin:', origin);
@@ -87,6 +102,8 @@ app.use(
       }
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
   })
 );
 
