@@ -1,50 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="backend-url" content="https://fintech-dashboard-backend.vercel.app/api">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="backend-url"
+      content="https://fintech-dashboard-backend.vercel.app/api"
+    />
     <title>Fintech Dashboard</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Fintech Dashboard</h1>
-    
+
     <nav>
-        <button onclick="window.location.href='transaction.html'">Transactions</button>
-        <button onclick="window.location.href='profile.html'">Profile</button>
-        <button onclick="logout()">Logout</button>
+      <button onclick="window.location.href='transaction.html'">
+        Transactions
+      </button>
+      <button onclick="window.location.href='profile.html'">Profile</button>
+      <button onclick="logout()">Logout</button>
     </nav>
 
     <div id="errorMessage"></div>
-    
+
     <div id="loading">
-        <p>Loading dashboard...</p>
+      <p>Loading dashboard...</p>
     </div>
 
-    <div id="dashboardContent" style="display: none;">
-        <h2>Profile Information</h2>
-        <div>
-            <img id="profileImage" src="" alt="Profile" width="100" height="100">
-            <h3 id="username">Loading...</h3>
-            <p id="userRole">Loading...</p>
-            <span id="roleBadge">Loading...</span>
-        </div>
+    <div id="dashboardContent" style="display: none">
+      <h2>Profile Information</h2>
+      <div>
+        <img id="profileImage" src="" alt="Profile" width="100" height="100" />
+        <h3 id="username">Loading...</h3>
+        <p id="userRole">Loading...</p>
+        <span id="roleBadge">Loading...</span>
+      </div>
 
-        <h2>Account Summary</h2>
-        <div>
-            <p>Current Balance: <span id="balance">$0.00</span></p>
-            <p>Account Status: <span id="accountStatus">Active</span></p>
-            <p>Total Transactions: <span id="totalTransactions">0</span></p>
-        </div>
+      <h2>Account Summary</h2>
+      <div>
+        <p>Current Balance: <span id="balance">$0.00</span></p>
+        <p>Account Status: <span id="accountStatus">Active</span></p>
+        <p>Total Transactions: <span id="totalTransactions">0</span></p>
+      </div>
 
-        <h2>Quick Actions</h2>
-        <div>
-            <button onclick="window.location.href='transaction.html'">Make Transaction</button>
-            <button onclick="window.location.href='profile.html'">Update Profile</button>
-            <button onclick="refreshDashboard()">Refresh Data</button>
-        </div>
+      <h2>Quick Actions</h2>
+      <div>
+        <button onclick="window.location.href='transaction.html'">
+          Make Transaction
+        </button>
+        <button onclick="window.location.href='profile.html'">
+          Update Profile
+        </button>
+        <button onclick="refreshDashboard()">Refresh Data</button>
+      </div>
     </div>
 
     <script src="js/main.js"></script>
-</body>
-</html> 
+  </body>
+</html>

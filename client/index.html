@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="backend-url" content="https://fintech-dashboard-backend.vercel.app/api">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="backend-url"
+      content="https://fintech-dashboard-backend.vercel.app/api"
+    />
     <title>Fintech Dashboard</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Fintech Dashboard</h1>
     <p>Redirecting to Login...</p>
-    <p>If you are not redirected automatically, <a href="login.html">click here</a></p>
-    
+    <p>
+      If you are not redirected automatically,
+      <a href="login.html">click here</a>
+    </p>
+
     <script>
-        // Check if user is already logged in
-        const token = localStorage.getItem('token');
-        if (token) {
-            window.location.href = 'dashboard.html';
-        } else {
-            window.location.href = 'login.html';
-        }
+      // Check if user is already logged in
+      const token = localStorage.getItem("token");
+      if (token) {
+        window.location.href = "dashboard.html";
+      } else {
+        window.location.href = "login.html";
+      }
     </script>
-</body>
-</html> 
+  </body>
+</html>
