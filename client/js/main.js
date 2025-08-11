@@ -21,11 +21,11 @@ else {
     // Try to detect if we're on Vercel/Netlify and construct the URL
     const hostname = window.location.hostname;
     if (hostname.includes('vercel.app')) {
-        // If frontend is on Vercel, backend might be on same domain with different subdomain
-        BACKEND_API_URL = `https://fintech-dashboard-backend.vercel.app/api`;
+        // If frontend is on Vercel, backend is on Render
+        BACKEND_API_URL = `https://fintech-dashboard-t3e1.onrender.com/api`;
     } else if (hostname.includes('netlify.app')) {
-        // If frontend is on Netlify, backend might be on Vercel
-        BACKEND_API_URL = `https://fintech-dashboard-backend.vercel.app/api`;
+        // If frontend is on Netlify, backend is on Render
+        BACKEND_API_URL = `https://fintech-dashboard-t3e1.onrender.com/api`;
     } else {
         // Local development or other hosting
         BACKEND_API_URL = `http://localhost:5001/api`;
