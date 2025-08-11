@@ -21,7 +21,7 @@ dotenv.config();
 console.log("Mongo URI:", process.env.MONGO_URI);
 
 // Connect DB first (skip during testing)
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== "test") {
   connectDB();
 }
 
@@ -63,18 +63,18 @@ app.use((req, res, next) => {
 
 // CORS configuration
 const allowedOrigins = [
-  "http://localhost:5001", 
+  "http://localhost:5001",
   "http://127.0.0.1:5500",
   "http://localhost:3000",
   "https://fintech-dashboard-tau.vercel.app",
   "https://*.vercel.app",
   "https://*.netlify.app",
-  "https://*.github.io"
+  "https://*.github.io",
 ]; // frontend urls
 
 const corsOptions = {
   origin: function (origin, callback) {
-    console.log('CORS request from origin:', origin);
+    console.log("CORS request from origin:", origin);
 
     if (!origin) {
       // Allow requests with no origin (like mobile apps or Postman)
@@ -83,33 +83,40 @@ const corsOptions = {
     }
 
     // Check if origin is in allowed list
-    const isAllowed = allowedOrigins.some(allowed => {
-      if (allowed.includes('*')) {
+    const isAllowed = allowedOrigins.some((allowed) => {
+      if (allowed.includes("*")) {
         // Handle wildcard domains
-        const domain = allowed.replace('*.', '');
+        const domain = allowed.replace("*.", "");
         return origin.includes(domain);
       }
       return origin === allowed;
     });
 
     if (isAllowed) {
-      console.log('CORS allowed for origin:', origin);
+      console.log("CORS allowed for origin:", origin);
       callback(null, true);
     } else {
-      console.log('CORS blocked origin:', origin);
+      console.log("CORS blocked origin:", origin);
       callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Accept",
+    "Origin",
+  ],
   optionsSuccessStatus: 204,
   maxAge: 86400,
 };
 
 app.use(cors(corsOptions));
 // Explicitly handle preflight requests
-app.options('*', cors(corsOptions));
+// Using regex to avoid Express 5 path-to-regexp issues with '*'
+app.options(/.*/, cors(corsOptions));
 
 // public static
 app.use(express.static("public"));
