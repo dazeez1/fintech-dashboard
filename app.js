@@ -62,14 +62,27 @@ app.use((req, res, next) => {
 });
 
 // CORS configuration
-const allowedOrigins = ["http://localhost:5001", "http://127.0.0.1:5500"]; // frontend url
+const allowedOrigins = [
+  "http://localhost:5001", 
+  "http://127.0.0.1:5500",
+  "http://localhost:3000",
+  "https://*.vercel.app",
+  "https://*.netlify.app",
+  "https://*.github.io"
+]; // frontend urls
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.some(allowed => {
+        if (allowed.includes('*')) {
+          return origin.includes(allowed.replace('*.', ''));
+        }
+        return allowedOrigins.includes(origin);
+      })) {
         callback(null, true);
       } else {
+        console.log('CORS blocked origin:', origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
