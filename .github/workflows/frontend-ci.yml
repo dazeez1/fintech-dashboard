@@ -1,0 +1,33 @@
+name: Frontend CI (client)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-client:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ensure client assets exist
+        run: |
+          test -f client/index.html
+          test -f client/login.html
+          test -f client/dashboard.html
+          test -f client/js/main.js
+
+      - name: Check backend meta tag is present
+        run: |
+          grep -q 'meta name="backend-url"' client/index.html || (echo "Missing backend-url meta in index.html" && exit 1)
+          grep -q 'meta name="backend-url"' client/login.html || (echo "Missing backend-url meta in login.html" && exit 1)
+          grep -q 'meta name="backend-url"' client/dashboard.html || (echo "Missing backend-url meta in dashboard.html" && exit 1)
+
+      - name: Basic static server smoke test
+        run: |
+          python3 -m http.server 3000 &
+          sleep 2
+          curl -sSf http://127.0.0.1:3000/client/index.html > /dev/null
