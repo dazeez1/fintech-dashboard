@@ -1,93 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="backend-url" content="https://fintech-dashboard-t3e1.onrender.com/api">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="backend-url"
+      content="https://fintech-dashboard-t3e1.onrender.com/api"
+    />
     <title>Fintech Dashboard - Sign Up</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Sign Up</h1>
-    
+
     <div id="errorMessage"></div>
     <div id="successMessage"></div>
 
     <form id="signupForm">
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        
-        <div>
-            <label for="confirmPassword">Confirm Password:</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" required>
-        </div>
-        
-        <button type="submit" id="signupBtn">Create Account</button>
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required />
+      </div>
+
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+
+      <div>
+        <label for="confirmPassword">Confirm Password:</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          required
+        />
+      </div>
+
+      <button type="submit" id="signupBtn">Create Account</button>
     </form>
 
-    <div id="loading" style="display: none;">
-        <p>Creating account...</p>
+    <div id="loading" style="display: none">
+      <p>Creating account...</p>
     </div>
 
     <p>Already have an account? <a href="login.html">Sign in here</a></p>
 
     <script src="js/main.js"></script>
     <script>
-        // Signup form handling
-        document.getElementById('signupForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+      // Signup form handling
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-            if (password !== confirmPassword) {
-                showError('Passwords do not match');
-                return;
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+          const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+          if (password !== confirmPassword) {
+            showError("Passwords do not match");
+            return;
+          }
+
+          const signupBtn = document.getElementById("signupBtn");
+          const loadingDiv = document.getElementById("loading");
+
+          // Show loading state
+          signupBtn.disabled = true;
+          signupBtn.textContent = "Creating Account...";
+          loadingDiv.style.display = "block";
+
+          try {
+            const response = await fetch(`${BACKEND_API_URL}/auth/register`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ username, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              showSuccess(
+                "Account created successfully! Redirecting to login..."
+              );
+              setTimeout(() => {
+                window.location.href = "login.html";
+              }, 2000);
+            } else {
+              throw new Error(data.message || "Signup failed");
             }
-
-            const signupBtn = document.getElementById('signupBtn');
-            const loadingDiv = document.getElementById('loading');
-
-            // Show loading state
-            signupBtn.disabled = true;
-            signupBtn.textContent = 'Creating Account...';
-            loadingDiv.style.display = 'block';
-
-            try {
-                const response = await fetch(`${BACKEND_API_URL}/auth/signup`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    showSuccess('Account created successfully! Redirecting to login...');
-                    setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 2000);
-                } else {
-                    throw new Error(data.message || 'Signup failed');
-                }
-            } catch (error) {
-                showError(error.message);
-            } finally {
-                // Reset loading state
-                signupBtn.disabled = false;
-                signupBtn.textContent = 'Create Account';
-                loadingDiv.style.display = 'none';
-            }
+          } catch (error) {
+            showError(error.message);
+          } finally {
+            // Reset loading state
+            signupBtn.disabled = false;
+            signupBtn.textContent = "Create Account";
+            loadingDiv.style.display = "none";
+          }
         });
     </script>
-</body>
-</html> 
+  </body>
+</html>
