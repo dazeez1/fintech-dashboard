@@ -1,6 +1,10 @@
 //app.js
 const express = require("express");
 const app = express();
+
+// Behind Render/Proxies: trust proxy so rate limiter and IP detection work
+app.set('trust proxy', 1);
+
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const xss = require("xss");
@@ -36,6 +40,8 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // max 100 requests per IP
   message: "Too many requests from this IP, please try again later.",
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 app.use("/api", limiter);
 
