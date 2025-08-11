@@ -72,40 +72,42 @@ const allowedOrigins = [
   "https://*.github.io"
 ]; // frontend urls
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      console.log('CORS request from origin:', origin);
-      
-      if (!origin) {
-        // Allow requests with no origin (like mobile apps or Postman)
-        callback(null, true);
-        return;
+const corsOptions = {
+  origin: function (origin, callback) {
+    console.log('CORS request from origin:', origin);
+
+    if (!origin) {
+      // Allow requests with no origin (like mobile apps or Postman)
+      callback(null, true);
+      return;
+    }
+
+    // Check if origin is in allowed list
+    const isAllowed = allowedOrigins.some(allowed => {
+      if (allowed.includes('*')) {
+        // Handle wildcard domains
+        const domain = allowed.replace('*.', '');
+        return origin.includes(domain);
       }
-      
-      // Check if origin is in allowed list
-      const isAllowed = allowedOrigins.some(allowed => {
-        if (allowed.includes('*')) {
-          // Handle wildcard domains
-          const domain = allowed.replace('*.', '');
-          return origin.includes(domain);
-        }
-        return origin === allowed;
-      });
-      
-      if (isAllowed) {
-        console.log('CORS allowed for origin:', origin);
-        callback(null, true);
-      } else {
-        console.log('CORS blocked origin:', origin);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-  })
-);
+      return origin === allowed;
+    });
+
+    if (isAllowed) {
+      console.log('CORS allowed for origin:', origin);
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+};
+
+app.use(cors(corsOptions));
+// Explicitly handle preflight requests
+app.options('*', cors(corsOptions));
 
 // public static
 app.use(express.static("public"));
@@ -133,41 +135,3 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(errorHandler);
 
 module.exports = app;
-
-/*
-
-// on;y allow frontend from a specific domain
-const allowedOrigins = ['http://localhost:3000']; //frontend url
-
-app.use(cors({
-  oring: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); 
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
-
-
-// CORS configuration
-const allowedOrigins = ['http://localhost:3000']; // frontend url
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); 
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
-
-// public static
-app.use(express.static('public'));
-
-
-
-*/
